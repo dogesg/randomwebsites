@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Random</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            background-color: #6200ea;
+            color: white;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        /* Botón en la parte superior izquierda */
+        .reload-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #ff5722;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            display: none; /* Inicialmente oculto */
+        }
+
+        .reload-btn:hover {
+            background-color: #e64a19;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón principal para ir a un sitio random -->
+    <button onclick="redirectRandom()">Ir a un sitio random</button>
+
+    <!-- Botón de recargar en la parte superior izquierda -->
+    <button class="reload-btn" id="reload-btn" onclick="reloadPage()">Recargar</button>
+
+    <script>
+        async function redirectRandom() {
+            const consonants = 'bcdfghjklmnpqrstvwxyz';
+            const vowels = 'aeiou';
+            const domains = ['.com', '.net', '.org', '.info', '.io'];
+
+            let foundValidUrl = false;
+
+            while (!foundValidUrl) {
+                let randomString = '';
+                for (let i = 0; i < 6; i++) {
+                    if (i % 2 === 0) {
+                        randomString += consonants[Math.floor(Math.random() * consonants.length)];
+                    } else {
+                        randomString += vowels[Math.floor(Math.random() * vowels.length)];
+                    }
+                }
+
+                const randomDomain = domains[Math.floor(Math.random() * domains.length)];
+                const randomUrl = `https://www.${randomString}${randomDomain}`;
+
+                try {
+                    const response = await fetch(randomUrl, { mode: 'no-cors' });
+                    foundValidUrl = true;
+                    window.location.href = randomUrl;
+                } catch (error) {
+                    console.log(`Falló: ${randomUrl}, intentando de nuevo...`);
+                    // Activar el botón de recarga si falla
+                    document.getElementById('reload-btn').style.display = 'block';
+                }
+            }
+        }
+
+        // Función para recargar la página
+        function reloadPage() {
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
